@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Implementation of Cloud Computing in Business Operation — MCA Project</title>
+<meta name="description" content="MCA project research site: cloud computing adoption in retail business operations. Includes report, presentation, and an illustrative algorithm demo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1E2761;
+    --navy-dark:#141A45;
+    --teal:#0E8C8C;
+    --teal-light:#5FC7C2;
+    --gold:#D9A441;
+    --ice:#EAF1FB;
+    --card:#F4F7FC;
+    --slate:#44546A;
+    --mute:#6B7A99;
+    --white:#FFFFFF;
+    --line:#E1E8F2;
+    --serif:'Source Serif 4', Georgia, serif;
+    --sans:'Inter', -apple-system, sans-serif;
+    --mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);
+    color:var(--slate);
+    background:var(--white);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .navrow{display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1120px; margin:0 auto;}
+  .navbrand{font-family:var(--serif); font-weight:700; font-size:18px; color:var(--navy);}
+  .navlinks{display:flex; gap:28px; font-size:14px; font-weight:600; list-style:none;}
+  .navlinks a{text-decoration:none; color:var(--slate); transition:color .2s;}
+  .navlinks a:hover{color:var(--teal);}
+  .navcta{
+    background:var(--navy); color:white; padding:9px 18px; border-radius:7px;
+    font-size:13.5px; font-weight:700; text-decoration:none; transition:background .2s;
+  }
+  .navcta:hover{background:var(--teal);}
+  @media(max-width:760px){ .navlinks{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color:white; padding:100px 0 90px; position:relative; overflow:hidden;
+  }
+  .hero::before{
+    content:''; position:absolute; top:-120px; right:-120px; width:480px; height:480px;
+    border-radius:50%; background:rgba(255,255,255,0.04);
+  }
+  .hero::after{
+    content:''; position:absolute; bottom:-160px; left:-80px; width:380px; height:380px;
+    border-radius:50%; background:rgba(94,199,194,0.07);
+  }
+  .eyebrow{
+    font-size:12.5px; font-weight:700; letter-spacing:2.5px; color:var(--teal-light);
+    text-transform:uppercase; margin-bottom:18px; position:relative; z-index:2;
+  }
+  .hero h1{
+    font-family:var(--serif); font-weight:700; font-size:clamp(32px,5vw,54px);
+    line-height:1.12; max-width:820px; margin-bottom:22px; position:relative; z-index:2;
+  }
+  .hero .sub{
+    font-size:18px; color:var(--ice); max-width:620px; margin-bottom:36px; position:relative; z-index:2;
+  }
+  .hero-meta{
+    display:flex; flex-wrap:wrap; gap:32px; position:relative; z-index:2; margin-bottom:42px;
+  }
+  .hero-meta div{font-size:13.5px;}
+  .hero-meta .label{color:var(--teal-light); font-weight:700; letter-spacing:1px; text-transform:uppercase; font-size:11px; margin-bottom:4px;}
+  .hero-meta .val{color:white; font-weight:600;}
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap; position:relative; z-index:2;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:13px 24px; border-radius:8px;
+    font-weight:700; font-size:14.5px; text-decoration:none; transition:transform .15s, box-shadow .15s;
+  }
+  .btn-primary{background:var(--teal); color:white;}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(14,140,140,0.35);}
+  .btn-ghost{background:rgba(255,255,255,0.08); color:white; border:1px solid rgba(255,255,255,0.25);}
+  .btn-ghost:hover{background:rgba(255,255,255,0.16); transform:translateY(-2px);}
+
+  /* ---------- SECTION SHARED ---------- */
+  section{padding:84px 0;}
+  .section-label{
+    font-size:12px; font-weight:700; letter-spacing:2px; color:var(--teal);
+    text-transform:uppercase; margin-bottom:14px;
+  }
+  h2.section-title{
+    font-family:var(--serif); font-size:clamp(26px,3.4vw,36px); color:var(--navy); font-weight:700;
+    margin-bottom:18px; max-width:680px;
+  }
+  .section-intro{font-size:16px; color:var(--slate); max-width:680px; margin-bottom:48px;}
+  .alt{background:var(--card);}
+
+  /* ---------- OBJECTIVES GRID ---------- */
+  .grid4{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  @media(max-width:900px){ .grid4{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:560px){ .grid4{grid-template-columns:1fr;} }
+  .obj-card{
+    background:white; border:1px solid var(--line); border-radius:12px; padding:28px 22px;
+    transition:box-shadow .2s, transform .2s;
+  }
+  .obj-card:hover{box-shadow:0 12px 28px rgba(30,39,97,0.08); transform:translateY(-3px);}
+  .obj-num{font-family:var(--serif); font-size:13px; color:var(--teal); font-weight:700; margin-bottom:10px;}
+  .obj-card h3{font-size:17px; color:var(--navy); margin-bottom:10px; font-weight:700;}
+  .obj-card p{font-size:13.5px; color:var(--mute); line-height:1.55;}
+
+  /* ---------- ARCHITECTURE ---------- */
+  .arch-figure{
+    border:1px solid var(--line); border-radius:14px; overflow:hidden; background:white;
+    box-shadow:0 16px 40px rgba(30,39,97,0.08);
+  }
+  .arch-figure img{width:100%;}
+  .fig-caption{font-size:13px; color:var(--mute); margin-top:14px; font-style:italic;}
+
+  /* ---------- DEMO (SIGNATURE ELEMENT) ---------- */
+  .demo-banner{
+    background:var(--navy-dark); color:white; border-radius:14px; padding:22px 26px;
+    margin-bottom:40px; display:flex; gap:16px; align-items:flex-start;
+    border-left:3px solid var(--gold);
+  }
+  .demo-banner .ico{font-size:22px; line-height:1;}
+  .demo-banner p{font-size:14px; color:var(--ice); line-height:1.6;}
+  .demo-banner strong{color:white;}
+
+  .demo-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  @media(max-width:860px){ .demo-grid{grid-template-columns:1fr;} }
+
+  .demo-card{
+    background:white; border:1px solid var(--line); border-radius:14px; padding:28px;
+    box-shadow:0 10px 26px rgba(30,39,97,0.06);
+  }
+  .demo-card h3{font-size:17px; color:var(--navy); margin-bottom:6px; font-weight:700;}
+  .demo-card .ref{font-size:12px; color:var(--teal); font-weight:600; margin-bottom:18px; display:block;}
+  .demo-row{margin-bottom:16px;}
+  .demo-row label{display:block; font-size:12.5px; font-weight:600; color:var(--slate); margin-bottom:6px;}
+  .demo-row input[type=range]{width:100%; accent-color:var(--teal);}
+  .demo-row .rangeval{font-family:var(--mono); font-size:12.5px; color:var(--navy); font-weight:600;}
+  .demo-row select{
+    width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:7px; font-size:13.5px;
+    font-family:var(--sans); color:var(--slate); background:white;
+  }
+  .demo-btn{
+    width:100%; padding:11px; background:var(--teal); color:white; border:none; border-radius:8px;
+    font-weight:700; font-size:14px; cursor:pointer; margin-top:6px; transition:background .2s;
+  }
+  .demo-btn:hover{background:var(--navy);}
+  .demo-output{
+    margin-top:18px; padding:16px; border-radius:9px; background:var(--card);
+    font-family:var(--mono); font-size:13px; color:var(--navy); min-height:54px;
+    border:1px solid var(--line); white-space:pre-wrap; word-break:break-word;
+  }
+  .demo-output.flag-ok{border-color:var(--teal); background:rgba(14,140,140,0.07);}
+  .demo-output.flag-warn{border-color:var(--gold); background:rgba(217,164,65,0.10);}
+  .pseudo{
+    margin-top:16px; font-family:var(--mono); font-size:11.5px; color:var(--mute);
+    background:var(--navy-dark); color:#C9D4E5; padding:14px 16px; border-radius:8px; overflow-x:auto;
+    line-height:1.6; white-space:pre-wrap;
+  }
+  .pseudo .kw{color:var(--teal-light);}
+
+  /* ---------- FINDINGS ---------- */
+  .findings-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media(max-width:860px){ .findings-grid{grid-template-columns:1fr;} }
+  .finding-card{background:white; border:1px solid var(--line); border-radius:12px; padding:24px;}
+  .finding-card .role{font-size:13px; font-weight:700; color:var(--navy); margin-bottom:10px;}
+  .finding-card .quote{font-size:13.5px; color:var(--slate); font-style:italic; line-height:1.55;}
+
+  .results-table{width:100%; border-collapse:collapse; margin-top:8px; font-size:14px;}
+  .results-table th{
+    background:var(--navy); color:white; text-align:left; padding:13px 16px; font-size:12.5px;
+    text-transform:uppercase; letter-spacing:0.5px; font-weight:700;
+  }
+  .results-table td{padding:13px 16px; border-bottom:1px solid var(--line); color:var(--slate);}
+  .results-table tr:nth-child(even) td{background:var(--card);}
+
+  /* ---------- DOWNLOADS ---------- */
+  .dl-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media(max-width:860px){ .dl-grid{grid-template-columns:1fr;} }
+  .dl-card{
+    background:white; border:1px solid var(--line); border-radius:12px; padding:26px;
+    text-decoration:none; display:block; transition:box-shadow .2s, transform .2s;
+  }
+  .dl-card:hover{box-shadow:0 14px 30px rgba(30,39,97,0.1); transform:translateY(-3px);}
+  .dl-icon{
+    width:44px; height:44px; border-radius:10px; background:var(--card); display:flex;
+    align-items:center; justify-content:center; font-size:20px; margin-bottom:16px;
+  }
+  .dl-card h3{font-size:15.5px; color:var(--navy); margin-bottom:6px; font-weight:700;}
+  .dl-card p{font-size:12.5px; color:var(--mute);}
+
+  /* ---------- INTEGRITY NOTE ---------- */
+  .integrity{
+    background:var(--ice); border:1px solid #CFE0F5; border-radius:12px; padding:24px 28px;
+    font-size:13.5px; color:var(--slate); line-height:1.65;
+  }
+  .integrity strong{color:var(--navy);}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--navy-dark); color:var(--ice); padding:48px 0 36px;}
+  .footer-row{display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px; font-size:13px;}
+  footer a{color:var(--teal-light); text-decoration:none;}
+  footer .fname{font-weight:700; color:white; margin-bottom:4px;}
+
+  .mono-tag{font-family:var(--mono); font-size:11px; color:var(--mute); letter-spacing:0.5px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="navrow">
+    <div class="navbrand">Cloud&nbsp;in&nbsp;Retail</div>
+    <ul class="navlinks">
+      <li><a href="#objectives">Objectives</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#demo">Live Demo</a></li>
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#downloads">Downloads</a></li>
+    </ul>
+    <a class="navcta" href="#downloads">Get the Report</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">MCA Project · Cloud Computing Specialization</div>
+    <h1>Implementation of Cloud Computing in Business Operation</h1>
+    <p class="sub">A research study on cloud adoption in retail operations — benefits, challenges, security, and a practical implementation framework, with reference to point-of-sale and inventory systems.</p>
+    <div class="hero-meta">
+      <div><div class="label">Author</div><div class="val">Anandumon Prasad Thuruthel</div></div>
+      <div><div class="label">Enrollment</div><div class="val">O24MCA110149</div></div>
+      <div><div class="label">Mentor</div><div class="val">Ms. Vasanthi Chandran</div></div>
+      <div><div class="label">Platform</div><div class="val">Qollabb · Plag Pro, Noida</div></div>
+    </div>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#demo">▶ Try the algorithm demo</a>
+      <a class="btn btn-ghost" href="#downloads">Download report &amp; slides</a>
+    </div>
+  </div>
+</header>
+
+<section id="objectives">
+  <div class="wrap">
+    <div class="section-label">Project Objectives</div>
+    <h2 class="section-title">Four questions this study answers</h2>
+    <p class="section-intro">Drawn directly from the project brief, each objective is addressed through a combination of literature review, practitioner interviews, and structured systems analysis.</p>
+    <div class="grid4">
+      <div class="obj-card"><div class="obj-num">01 — Evaluate</div><h3>Benefits &amp; Challenges</h3><p>What cloud computing actually delivers — and costs — for business institutions adopting it.</p></div>
+      <div class="obj-card"><div class="obj-num">02 — Analyze</div><h3>Operational Impact</h3><p>How cloud adoption changes efficiency and effectiveness in retail operations specifically.</p></div>
+      <div class="obj-card"><div class="obj-num">03 — Assess</div><h3>Security &amp; Privacy</h3><p>The data protection and compliance concerns that come with moving business systems to the cloud.</p></div>
+      <div class="obj-card"><div class="obj-num">04 — Explore</div><h3>Best Practices</h3><p>A practical, evidence-based framework for organizations beginning their own cloud migration.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="architecture" class="alt">
+  <div class="wrap">
+    <div class="section-label">System Design</div>
+    <h2 class="section-title">A hybrid cloud architecture for retail</h2>
+    <p class="section-intro">Store-level POS systems connect to a hybrid cloud environment that separates general business services from a tightly governed payment-processing segment. Full UML diagrams, ER model, and database schema are in Chapter 4 of the report.</p>
+    <div class="arch-figure">
+      <img src="assets/architecture.png" alt="Conceptual cloud architecture diagram for retail business operations" loading="lazy">
+    </div>
+    <p class="fig-caption">Figure 3.1 (from the project report) — Conceptual Cloud Architecture for Retail Business Operations.</p>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="section-label">Interactive Demo</div>
+    <h2 class="section-title">Run the conceptual logic yourself</h2>
+    <p class="section-intro">Section 5.5 of the report describes two pieces of conceptual logic underpinning the proposed system. Below, that pseudocode is made runnable so you can test it with your own inputs.</p>
+
+    <div class="demo-banner">
+      <span class="ico">ⓘ</span>
+      <p><strong>What this is — and isn't:</strong> this project is a research and systems-analysis study, not a deployed application (see Chapter 1.3 and Chapter 5.1 of the report). No retail system was built or is running in production. This page runs the project's own conceptual algorithms client-side, in your browser, purely to illustrate the logic described in Section 5.5 — it is not a live production system or a claim of one.</p>
+    </div>
+
+    <div class="demo-grid">
+      <!-- Demo 1: Stock check -->
+      <div class="demo-card">
+        <h3>Stock Availability Check</h3>
+        <span class="ref">Ref: Section 5.5.1 — Sequence Diagram Step 3</span>
+
+        <div class="demo-row">
+          <label>Current stock level: <span class="rangeval" id="stockLevelVal">10</span> units</label>
+          <input type="range" id="stockLevel" min="0" max="50" value="10">
+        </div>
+        <div class="demo-row">
+          <label>Requested quantity: <span class="rangeval" id="reqQtyVal">2</span> units</label>
+          <input type="range" id="reqQty" min="1" max="50" value="2">
+        </div>
+        <button class="demo-btn" onclick="runStockCheck()">Run checkStock()</button>
+        <div class="demo-output" id="stockOutput">Adjust the sliders and click run.</div>
+
+        <div class="pseudo"><span class="kw">FUNCTION</span> checkStock(storeId, sku, requestedQty):
+    record = INVENTORY.find(storeId, sku)
+    <span class="kw">IF</span> record.stock_level &gt;= requestedQty <span class="kw">THEN</span>
+        <span class="kw">RETURN</span> "AVAILABLE"
+    <span class="kw">ELSE</span>
+        <span class="kw">RETURN</span> "INSUFFICIENT_STOCK"
+    <span class="kw">END IF</span></div>
+      </div>
+
+      <!-- Demo 2: Auto-scaling -->
+      <div class="demo-card">
+        <h3>Cloud Auto-Scaling Trigger</h3>
+        <span class="ref">Ref: Section 5.5.2 — Elasticity Logic</span>
+
+        <div class="demo-row">
+          <label>Current system load: <span class="rangeval" id="loadVal">50</span>%</label>
+          <input type="range" id="loadInput" min="0" max="100" value="50">
+        </div>
+        <div class="demo-row">
+          <label>Scale-out threshold (upper bound): <span class="rangeval" id="upperVal">80</span>%</label>
+          <input type="range" id="upperInput" min="50" max="100" value="80">
+        </div>
+        <div class="demo-row">
+          <label>Scale-in threshold (lower bound): <span class="rangeval" id="lowerVal">20</span>%</label>
+          <input type="range" id="lowerInput" min="0" max="50" value="20">
+        </div>
+        <button class="demo-btn" onclick="runScaling()">Run evaluateScaling()</button>
+        <div class="demo-output" id="scaleOutput">Adjust the sliders and click run.</div>
+
+        <div class="pseudo"><span class="kw">FUNCTION</span> evaluateScaling(currentLoad, threshold):
+    <span class="kw">IF</span> currentLoad &gt; threshold.upper <span class="kw">THEN</span>
+        triggerScaleOut()
+    <span class="kw">ELSE IF</span> currentLoad &lt; threshold.lower <span class="kw">THEN</span>
+        triggerScaleIn()
+    <span class="kw">END IF</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="findings" class="alt">
+  <div class="wrap">
+    <div class="section-label">Key Findings</div>
+    <h2 class="section-title">What practitioners and case studies showed</h2>
+    <p class="section-intro">Three structured interviews with practicing IT professionals, triangulated against two retail case studies (Chapter 7 of the report).</p>
+    <div class="findings-grid">
+      <div class="finding-card">
+        <div class="role">IT Support Specialist, Retail (5+ yrs)</div>
+        <p class="quote">"Cloud-hosted POS cut downtime during peak sales, but staff needed structured retraining."</p>
+      </div>
+      <div class="finding-card">
+        <div class="role">Systems Administrator, Enterprise IT (7+ yrs)</div>
+        <p class="quote">"18-month phased migration — security &amp; IAM planning took longer than expected."</p>
+      </div>
+      <div class="finding-card">
+        <div class="role">Cloud Support Engineer (4+ yrs)</div>
+        <p class="quote">"Cost overruns without centralized governance — tagging and budget alerts are essential."</p>
+      </div>
+    </div>
+
+    <table class="results-table">
+      <tr><th>Dimension</th><th>On-Premises (Existing)</th><th>Cloud-Based (Proposed)</th></tr>
+      <tr><td>Scalability during peak demand</td><td>Manual, slow (weeks)</td><td>Elastic, automated (minutes)</td></tr>
+      <tr><td>Downtime during peak periods</td><td>Higher risk</td><td>Reduced (per case study)</td></tr>
+      <tr><td>Software rollout across stores</td><td>On-site visits required</td><td>Centralized, simultaneous</td></tr>
+      <tr><td>Cross-store inventory visibility</td><td>Limited, delayed</td><td>Real-time</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="downloads">
+  <div class="wrap">
+    <div class="section-label">Project Materials</div>
+    <h2 class="section-title">Download the full submission</h2>
+    <p class="section-intro">The complete 58-page report, final presentation deck, and project execution evidence, as submitted on the Qollabb platform.</p>
+    <div class="dl-grid">
+      <a class="dl-card" href="downloads/Project_Report.pdf" download>
+        <div class="dl-icon">📄</div>
+        <h3>Project Report (PDF)</h3>
+        <p>58 pages · full chapters, diagrams &amp; references</p>
+      </a>
+      <a class="dl-card" href="downloads/Project_Report.docx" download>
+        <div class="dl-icon">📝</div>
+        <h3>Project Report (DOCX)</h3>
+        <p>Editable Word document, original source</p>
+      </a>
+      <a class="dl-card" href="downloads/Final_Presentation.pptx" download>
+        <div class="dl-icon">📊</div>
+        <h3>Final Presentation</h3>
+        <p>18-slide deck for mentor evaluation</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="integrity">
+      <strong>Academic integrity note.</strong> This project is a research and systems-analysis study (literature review, practitioner interviews, case study analysis, and conceptual system design) — not a deployed software product. The interactive demo above runs the project's own pseudocode from Section 5.5 of the report for illustrative purposes only; it does not represent a built or production retail system. All diagrams, findings, and figures shown here are drawn directly from the submitted report and are reproduced for reference, not as separate or additional claims.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>
+      <div class="fname">Anandumon Prasad Thuruthel</div>
+      <div class="mono-tag">O24MCA110149 · MCA, Cloud Computing</div>
+    </div>
+    <div>
+      <div>Mentor: Ms. Vasanthi Chandran</div>
+      <div class="mono-tag">Qollabb · Plag Pro, Noida</div>
+    </div>
+    <div>
+      <div>Project status: Submitted 2026</div>
+      <div class="mono-tag">Site built for project reference</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // wire up range labels
+  const pairs = [
+    ['stockLevel','stockLevelVal'], ['reqQty','reqQtyVal'],
+    ['loadInput','loadVal'], ['upperInput','upperVal'], ['lowerInput','lowerVal']
+  ];
+  pairs.forEach(([inputId, labelId]) => {
+    const input = document.getElementById(inputId);
+    const label = document.getElementById(labelId);
+    input.addEventListener('input', () => label.textContent = input.value);
+  });
+
+  function runStockCheck(){
+    const stock = parseInt(document.getElementById('stockLevel').value, 10);
+    const req = parseInt(document.getElementById('reqQty').value, 10);
+    const out = document.getElementById('stockOutput');
+    // Directly mirrors Section 5.5.1 pseudocode
+    let result;
+    if (stock >= req) {
+      result = "AVAILABLE";
+      out.className = "demo-output flag-ok";
+    } else {
+      result = "INSUFFICIENT_STOCK";
+      out.className = "demo-output flag-warn";
+    }
+    out.textContent = `checkStock(storeId, sku, ${req})\n→ record.stock_level = ${stock}\n→ ${stock} >= ${req} ? ${stock >= req}\n→ RETURN "${result}"`;
+  }
+
+  function runScaling(){
+    const load = parseInt(document.getElementById('loadInput').value, 10);
+    const upper = parseInt(document.getElementById('upperInput').value, 10);
+    const lower = parseInt(document.getElementById('lowerInput').value, 10);
+    const out = document.getElementById('scaleOutput');
+    let action;
+    if (load > upper) {
+      action = "triggerScaleOut()  — provisioning additional compute instances";
+      out.className = "demo-output flag-warn";
+    } else if (load < lower) {
+      action = "triggerScaleIn()  — de-provisioning idle compute instances";
+      out.className = "demo-output flag-ok";
+    } else {
+      action = "(no action) — load is within the stable band";
+      out.className = "demo-output";
+    }
+    out.textContent = `evaluateScaling(${load}, {upper:${upper}, lower:${lower}})\n→ ${action}`;
+  }
+</script>
+
+</body>
+</html>
